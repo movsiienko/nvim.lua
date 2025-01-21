@@ -1,0 +1,5 @@
+require("movsiienko.remap")
+require("movsiienko.config.lazy")
+require("movsiienko.colorscheme")
+require("movsiienko.line_numbers")
+require("movsiienko.set")

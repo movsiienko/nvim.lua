@@ -1,0 +1,144 @@
+-- NOTE: to make any of this work you need a language server.
+-- If you don't know what that is, watch this 5 min video:
+-- https://www.youtube.com/watch?v=LaS32vctfOY
+
+require("mason").setup()
+require("mason-lspconfig").setup({ ensure_installed = { "pyright", "ruff", "rust_analyzer", "lua_ls", "biome", "ts_ls" }, automatic_installation = true })
+require("mason-lspconfig").setup_handlers {
+    -- The first entry (without a key) will be the default handler
+    -- and will be called for each installed server that doesn't have
+    -- a dedicated handler.
+    function(server_name) -- default handler (optional)
+        require("lspconfig")[server_name].setup {}
+    end,
+    ["lua_ls"] = function()
+        local lspconfig = require("lspconfig")
+        lspconfig.lua_ls.setup {
+            settings = {
+                Lua = {
+                    diagnostics = {
+                        globals = { "vim" }
+                    }
+                }
+            }
+        }
+    end,
+    ["ruff"] = function()
+        local lspconfig = require("lspconfig")
+        lspconfig.ruff.setup {
+            settings = {
+                python = {
+                    ["line-length"] = 120
+                }
+            }
+        }
+    end
+}
+local lspconfig = require 'lspconfig'
+local configs = require 'lspconfig.configs'
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = "*.rq", -- your file pattern
+    callback = function()
+        vim.bo.filetype = "sparql"
+    end
+})
+
+-- Check if the config is already defined (useful when reloading this file)
+if not configs.sparql_language_server then
+    configs.sparql_language_server = {
+        default_config = {
+            cmd = { 'node', '/opt/homebrew/lib/node_modules/sparql-language-server/dist/cli.js', '--stdio' },
+            filetypes = { 'sparql' },
+            root_dir = function(fname)
+                return lspconfig.util.find_git_ancestor(fname)
+            end,
+            single_file_support = true,
+            settings = {},
+        },
+    }
+end
+lspconfig.sparql_language_server.setup {}
+-- Reserve a space in the gutter
+vim.opt.signcolumn = 'yes'
+
+-- Add cmp_nvim_lsp capabilities settings to lspconfig
+-- This should be executed before you configure any language server
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+    'force',
+    lspconfig_defaults.capabilities,
+    require('cmp_nvim_lsp').default_capabilities()
+)
+
+-- This is where you enable features that only work
+-- if there is a language server active in the file
+vim.api.nvim_create_autocmd('LspAttach', {
+    desc = 'LSP actions',
+    callback = function(event)
+        local opts = { buffer = event.buf }
+
+        vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+        vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+        vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+        vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+        vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+        vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+        vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+        vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+        vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+        vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+    end,
+})
+
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+    pattern = "*",
+    callback = function(args)
+        vim.lsp.buf.format({ async = false })
+        -- vim.api.nvim_buf_call(args.buf, function()
+        --     vim.cmd('write')
+        -- end)
+    end
+})
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+    pattern = "*.rq",
+    callback = function(args)
+        local filename = vim.api.nvim_buf_get_name(args.buf)
+        local temp_file = filename .. '.temp'
+
+        -- Save current buffer content to temp file
+        local content = vim.api.nvim_buf_get_lines(args.buf, 0, -1, false)
+        vim.fn.writefile(content, temp_file)
+
+        -- Format temp file and capture output
+        local formatted = vim.fn.system('sparql-formatter ' .. temp_file)
+
+        -- Delete temp file
+        vim.fn.delete(temp_file)
+
+        -- Replace buffer contents with formatted code
+        local formatted_lines = vim.split(formatted, '\n', { trimempty = true })
+        vim.api.nvim_buf_set_lines(args.buf, 0, -1, false, formatted_lines)
+    end
+})
+
+
+local cmp = require('cmp')
+
+cmp.setup({
+    sources = {
+        { name = 'nvim_lsp' },
+    },
+    snippet = {
+        expand = function(args)
+            -- You need Neovim v0.10 to use vim.snippet
+            vim.snippet.expand(args.body)
+        end,
+    },
+    mapping = cmp.mapping.preset.insert({
+        ['<Tab>'] = cmp.mapping.select_next_item(),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    }),
+})
