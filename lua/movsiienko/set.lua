@@ -18,3 +18,5 @@ vim.opt.incsearch = true
 
 vim.opt.scrolloff = 8
 vim.opt.updatetime = 50
+
+vim.diagnostic.config { vitrual_lines = true }

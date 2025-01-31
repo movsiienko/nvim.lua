@@ -1,5 +1,5 @@
 if vim.g.neovide then
-    vim.o.guifont = "Monaco:h16"
+    vim.o.guifont = "Monaco:h17"
     vim.g.neovide_refresh_rate = 144
     vim.keymap.set('n', '<D-v>', '"+P')         -- Paste normal mode
     vim.keymap.set('v', '<D-v>', '"+P')         -- Paste visual mode
