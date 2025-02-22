@@ -20,3 +20,11 @@ vim.opt.scrolloff = 8
 vim.opt.updatetime = 50
 
 vim.diagnostic.config { vitrual_lines = true }
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+    desc = "Highlight yanked text",
+    group = vim.api.nvim_create_augroup("highligh-yank", { clear = true }),
+    callback = function()
+        vim.highlight.on_yank()
+    end
+})
