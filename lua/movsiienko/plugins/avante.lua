@@ -7,7 +7,7 @@ return {
         -- for example
         provider = "claude",
         claude = {
-            model = "claude-3-5-sonnet-latest",
+            model = "claude-3-7-sonnet-latest",
         },
         behaviour = {
             enable_claude_text_editor_tool_mode = true,
