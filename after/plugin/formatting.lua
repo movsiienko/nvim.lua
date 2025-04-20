@@ -34,8 +34,12 @@ vim.keymap.set({ "n", "v" }, "<leader>mp", function()
 end, { desc = "Format file or range (in visual mode)" })
 
 conform.formatters.ruff = {
-  prepend_args = { "-l", "120" },
+  args = { "format", "--stdin-filename", "$FILENAME", "--line-length", "120" },
 }
+
+-- conform.formatters.isort = {
+--   args = { "--profile", "black" },
+-- }
 
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*",

@@ -13,18 +13,17 @@ vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.nvim/undodir"
 vim.opt.undofile = true
 
-
 vim.opt.incsearch = true
 
 vim.opt.scrolloff = 8
 vim.opt.updatetime = 50
 
-vim.diagnostic.config { vitrual_lines = true, virtual_text = true }
+vim.diagnostic.config({ virtual_lines = true })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-    desc = "Highlight yanked text",
-    group = vim.api.nvim_create_augroup("highligh-yank", { clear = true }),
-    callback = function()
-        vim.highlight.on_yank()
-    end
+  desc = "Highlight yanked text",
+  group = vim.api.nvim_create_augroup("highligh-yank", { clear = true }),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
 })
