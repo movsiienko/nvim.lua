@@ -92,10 +92,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 local cmp = require("cmp")
+local lspkind = require("lspkind")
 
 cmp.setup({
   sources = {
     { name = "nvim_lsp" },
+    { name = "copilot" },
   },
   snippet = {
     expand = function(args)
@@ -107,4 +109,12 @@ cmp.setup({
     ["<Tab>"] = cmp.mapping.select_next_item(),
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
   }),
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = "symbol", -- show only symbol annotations
+      ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+      show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+      symbol_map = { Copilot = "" },
+    }),
+  },
 })
