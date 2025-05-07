@@ -2,66 +2,23 @@
 -- If you don't know what that is, watch this 5 min video:
 -- https://www.youtube.com/watch?v=LaS32vctfOY
 
-require("mason").setup()
-require("mason-lspconfig").setup({
-  ensure_installed = { "pyright", "ruff", "rust_analyzer", "lua_ls", "biome", "ts_ls" },
-  automatic_installation = true,
-})
-require("mason-lspconfig").setup_handlers({
-  -- The first entry (without a key) will be the default handler
-  -- and will be called for each installed server that doesn't have
-  -- a dedicated handler.
-  function(server_name) -- default handler (optional)
-    require("lspconfig")[server_name].setup({})
-  end,
-  ["lua_ls"] = function()
-    local lspconfig = require("lspconfig")
-    lspconfig.lua_ls.setup({
-      settings = {
-        Lua = {
-          diagnostics = {
-            globals = { "vim" },
-          },
-        },
-      },
-    })
-  end,
-  ["ruff"] = function()
-    local lspconfig = require("lspconfig")
-    lspconfig.ruff.setup({
-      settings = {
-        python = {
-          ["line-length"] = 120,
-        },
-      },
-    })
-  end,
-})
-local lspconfig = require("lspconfig")
-local configs = require("lspconfig.configs")
-
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*.rq", -- your file pattern
   callback = function()
     vim.bo.filetype = "sparql"
   end,
 })
+require("mason").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = { "pyright", "ruff", "rust_analyzer", "lua_ls", "biome", "ts_ls" },
+})
 
 -- Check if the config is already defined (useful when reloading this file)
-if not configs.sparql_language_server then
-  configs.sparql_language_server = {
-    default_config = {
-      cmd = { "node", "/opt/homebrew/lib/node_modules/sparql-language-server/dist/cli.js", "--stdio" },
-      filetypes = { "sparql" },
-      root_dir = function(fname)
-        return lspconfig.util.find_git_ancestor(fname)
-      end,
-      single_file_support = true,
-      settings = {},
-    },
-  }
-end
-lspconfig.sparql_language_server.setup({})
+vim.lsp.config.sparql_language_server = {
+  cmd = { "node", "/opt/homebrew/lib/node_modules/sparql-language-server/dist/cli.js", "--stdio" },
+  filetypes = { "sparql" },
+}
+vim.lsp.enable({ "sparql_language_server" })
 -- Reserve a space in the gutter
 vim.opt.signcolumn = "yes"
 
