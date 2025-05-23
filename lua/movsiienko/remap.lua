@@ -16,3 +16,5 @@ vim.keymap.set("n", "<leader>d", '"_d')
 vim.keymap.set("v", "<leader>d", '"_d')
 
 vim.keymap.set("n", "<Esc>", ":nohl<Cr>", { silent = true })
+
+vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
