@@ -23,6 +23,7 @@ conform.setup({
     lua = { "stylua" },
     python = { "isort", "ruff" },
     sparql = { "sparql_formatter" },
+    haskell = { "ormolu" },
   },
 })
 vim.keymap.set({ "n", "v" }, "<leader>mp", function()
