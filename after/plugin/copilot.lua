@@ -22,6 +22,15 @@ require("copilot").setup({
       yaml = true,
       json = true,
       markdown = true,
+      sh = function()
+        if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
+          -- disable for .env files
+          return false
+        elseif vim.fs.basename(vim.api.nvim_buf_get_name(0)) == ".zshrc" then
+          return false
+        end
+        return true
+      end,
     },
   },
 })

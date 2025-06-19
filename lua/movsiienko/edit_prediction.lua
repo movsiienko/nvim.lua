@@ -75,7 +75,7 @@ function M.show_inline_string_diff(hardcoded_string)
       virt_text = { { "- " .. hardcoded_string, "DiffAdd" } },
       -- virt_lines_leftcol = true,
       -- virt_lines_above = true,
-      virt_text_pos = "inline", -- Display virtual text above the line
+      virt_text_pos = "overlay", -- Display virtual text above the line
       priority = 100, -- Ensure it's visible over other potential extmarks
     })
     extmark_id_counter = extmark_id_counter + 1
@@ -88,7 +88,7 @@ function M.show_inline_string_diff(hardcoded_string)
       end_col = 10,
       hl_group = "DiffDelete",
       -- virt_text = {{'+ ' .. current_line_content, 'DiffAdd'}}, -- Optional: Add '+' prefix as virtual text for current line too
-      -- virt_text_pos = 'above',
+      virt_text_pos = "overlay",
       priority = 150, -- Lower priority than the "old" text's virtual text
     })
     extmark_id_counter = extmark_id_counter + 1
