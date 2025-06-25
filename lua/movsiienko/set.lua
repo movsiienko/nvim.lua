@@ -18,7 +18,7 @@ vim.opt.incsearch = true
 vim.opt.scrolloff = 8
 vim.opt.updatetime = 50
 
-vim.diagnostic.config({ virtual_lines = true })
+vim.diagnostic.config({ virtual_lines = { current_line = true } })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight yanked text",
