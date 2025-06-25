@@ -56,7 +56,6 @@ local function find_words()
   -- Pattern to match words (including various separators)
   -- This pattern considers parentheses, brackets, and other punctuation as word boundaries
   local word_pattern = "[%w_]+"
-
   for line_idx, line in ipairs(lines) do
     local line_num = topline + line_idx - 1
     local col = 1
@@ -250,6 +249,6 @@ function M.create_mapping(mode, lhs)
   })
 end
 
-M.create_mapping("n", "<leader>j")
+M.create_mapping("n", "gw")
 
 return M
