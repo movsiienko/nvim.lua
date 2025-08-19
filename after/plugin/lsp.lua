@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "pyright", "ruff", "rust_analyzer", "lua_ls", "biome", "ts_ls" },
+  ensure_installed = { "ruff", "rust_analyzer", "lua_ls", "ts_ls" },
 })
 
 -- Check if the config is already defined (useful when reloading this file)
