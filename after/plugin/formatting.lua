@@ -7,6 +7,11 @@ conform.setup({
       args = { "$FILENAME" },
       stdin = true,
     },
+    forge_fmt = {
+      command = "forge",
+      args = { "fmt", "--raw", "-" },
+      stdin = true,
+    },
   },
   formatters_by_ft = {
     javascript = { "prettier" },
@@ -24,6 +29,7 @@ conform.setup({
     python = { "isort", "ruff" },
     sparql = { "sparql_formatter" },
     haskell = { "ormolu" },
+    solidity = { "forge_fmt" },
   },
 })
 vim.keymap.set({ "n", "v" }, "<leader>mp", function()

@@ -1,8 +1,5 @@
 return {
   "folke/sidekick.nvim",
-  config = function()
-    require("sidekick").setup()
-  end,
   opts = {
     -- add any options here
     cli = {
