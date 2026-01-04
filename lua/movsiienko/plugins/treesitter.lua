@@ -1,11 +1,12 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     build = ":TSUpdate",
     dependencies = {},
     event = { "BufReadPost", "BufNewFile" },
     config = function()
-      require("nvim-treesitter.configs").setup({
+      require("nvim-treesitter").setup({
         -- A list of parser names, or "all" (the listed parsers MUST always be installed)
         ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
 
@@ -54,11 +55,11 @@ return {
     end,
   },
   {
-
     "nvim-treesitter/nvim-treesitter-textobjects",
     after = "nvim-treesitter",
+    branch = "main",
     config = function()
-      require("nvim-treesitter.configs").setup({
+      require("nvim-treesitter").setup({
         textobjects = {
           select = {
             enable = true,
@@ -86,7 +87,7 @@ return {
             -- mapping query_strings to modes.
             selection_modes = {
               ["@parameter.outer"] = "v", -- charwise
-              ["@function.outer"] = "V", -- linewise
+              ["@function.outer"] = "V",  -- linewise
               ["@class.outer"] = "<c-v>", -- blockwise
             },
             -- If you set this to `true` (default is `false`) then any textobject is
@@ -114,22 +115,22 @@ return {
 (yul_function_definition
   (yul_block) @function.inside) @function.around
 
-(function_definition 
+(function_definition
   ((parameter) @parameter.inside . ","? @parameter.around) @parameter.around)
 
-(constructor_definition 
+(constructor_definition
   ((parameter) @parameter.inside . ","? @parameter.around) @parameter.around)
 
-(return_type_definition 
+(return_type_definition
   ((parameter) @entry.inside . ","? @entry.around) @entry.around)
 
-(modifier_definition 
+(modifier_definition
   ((parameter) @parameter.inside . ","? @parameter.around) @parameter.around)
 
-(event_definition 
+(event_definition
   ((event_parameter) @parameter.inside . ","? @parameter.around) @parameter.around)
 
-(error_declaration 
+(error_declaration
   ((error_parameter) @parameter.inside . ","? @parameter.around) @parameter.around)
 
 (call_argument
@@ -166,18 +167,18 @@ return {
     after = "nvim-treesitter",
     config = function()
       require("treesitter-context").setup({
-        enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-        multiwindow = false, -- Enable multiwindow support.
-        max_lines = 3, -- How many lines the window should span. Values <= 0 mean no limit.
-        min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+        enable = true,            -- Enable this plugin (Can be enabled/disabled later via commands)
+        multiwindow = false,      -- Enable multiwindow support.
+        max_lines = 3,            -- How many lines the window should span. Values <= 0 mean no limit.
+        min_window_height = 0,    -- Minimum editor window height to enable context. Values <= 0 mean no limit.
         line_numbers = true,
         multiline_threshold = 20, -- Maximum number of lines to show for a single context
-        trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-        mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+        trim_scope = "outer",     -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+        mode = "cursor",          -- Line used to calculate context. Choices: 'cursor', 'topline'
         -- Separator between context and content. Should be a single character string, like '-'.
         -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
         separator = nil,
-        zindex = 20, -- The Z-index of the context window
+        zindex = 20,     -- The Z-index of the context window
         on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
       })
     end,

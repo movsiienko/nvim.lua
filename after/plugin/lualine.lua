@@ -30,25 +30,11 @@ require("lualine").setup({
         -- 3: Absolute path, with tilde as the home directory
         -- 4: Filename and parent dir, with tilde as the home directory
         symbols = {
-          modified = "[+]", -- Text to show when the file is modified.
-          readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
+          modified = "[+]",      -- Text to show when the file is modified.
+          readonly = "[-]",      -- Text to show when the file is non-modifiable or readonly.
           unnamed = "[No Name]", -- Text to show for unnamed buffers.
-          newfile = "[New]", -- Text to show for newly created file before first write
+          newfile = "[New]",     -- Text to show for newly created file before first write
         },
-      },
-      {
-        "sidekick",
-        icon = " ",
-        color = function()
-          local status = require("sidekick.status").get()
-          if status then
-            return status.kind == "Error" and "DiagnosticError" or status.busy and "DiagnosticWarn" or "Special"
-          end
-        end,
-        cond = function()
-          local status = require("sidekick.status")
-          return status.get() ~= nil
-        end,
       },
     },
     lualine_y = { "progress" },
