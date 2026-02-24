@@ -17,6 +17,9 @@ vim.opt.incsearch = true
 
 vim.opt.scrolloff = 8
 vim.opt.updatetime = 50
+vim.o.shell = "/bin/sh"
+vim.o.showmode = false
+vim.o.cursorline = true
 
 vim.diagnostic.config({ virtual_lines = { current_line = true } })
 
@@ -43,4 +46,5 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.cmd("colorscheme rose-pine-main")
+
+vim.cmd("colorscheme kanagawa-dragon")
